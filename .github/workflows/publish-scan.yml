@@ -41,6 +41,11 @@ jobs:
           bad=0
           while IFS= read -r line; do
             name=${line%% <*}; email=${line##*<}; email=${email%>}
+            # GitHub's own bots (Dependabot, Actions) are public identities by construction;
+            # match the exact <id>+<name>[bot]@users.noreply.github.com form, nothing looser
+            if [[ "$name" =~ ^[a-z0-9-]+\[bot\]$ && "$email" == +([0-9])+"$name"@users.noreply.github.com ]]; then
+              continue
+            fi
             if [ "$name" != "$ALLOWED_AUTHOR_NAME" ] || [ "${email%$ALLOWED_AUTHOR_EMAIL_SUFFIX}" = "$email" ]; then
               echo "::error::commit identity is not the public one: $line"
               bad=1
