@@ -19,11 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Scope: this file covers code — `scripts/`, `config/` and the workflow in `.github/`.
-The documentation (`README.md`, `SECURITY-AND-PRIVACY.md`, `SECURITY.md`, `NOTICE`,
-`docs/**`, `reviews/**`) is licensed CC BY 4.0, see `LICENSE-CC-BY-4.0`.
-Nothing else is licensed here: no captured creative, game asset, trademark or
-third-party software is distributed with this repository (see `NOTICE`).

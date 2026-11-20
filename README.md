@@ -10,7 +10,7 @@ carries the command that verifies it, and each failure mode carries the symptom 
 > reproduced and debugged. It comes with no warranty and no endorsement: the games, ad networks and
 > tools named here belong to their owners, no creative or asset is distributed, and running an
 > automated capture channel is your decision and your risk. Read `SECURITY-AND-PRIVACY.md` (sections 4
-> and 5) and `NOTICE` before you use it. Code is MIT, documentation is CC BY 4.0 — see `LICENSE`.
+> and 5) and `NOTICE` before you use it. Code (`scripts/`, `config/`) is MIT, see `LICENSE`; documentation (`docs/`, `README.md`, `SECURITY-AND-PRIVACY.md`, `SECURITY.md`, `NOTICE`, `reviews/`) is CC BY 4.0, see `LICENSE-CC-BY-4.0`.
 
 Measured state of the reference rig: 30 distinct creatives from 16 games, 129 MB, captured over
 two days from one emulated Android device — the 30th arrived during the writing of this document,
