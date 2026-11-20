@@ -250,8 +250,11 @@ if HAS_GIT and not NO_GIT:
             sys.exit(2)
         return res
 
-    row("private/ ignored", git("check-ignore", "-q", "private").returncode == 0)
-    row("private/**/ ignored", git("check-ignore", "-q", "private/templates/x.png").returncode == 0)
+    # --no-index: the pattern decides, not whether the path happens to exist in this checkout
+    row("private/ ignored",
+        git("check-ignore", "--no-index", "-q", "private/templates/x.png").returncode == 0)
+    row("private/**/ ignored",
+        git("check-ignore", "--no-index", "-q", "private/reviews/x.log").returncode == 0)
     row("reviews/ published", git("check-ignore", "-q", "reviews/README.md").returncode != 0)
     blocked = ("private/", "captured/", "adcapture/", "playable/", "mitmconf/", "all/",
                "century/", "flows/")
@@ -271,9 +274,12 @@ if HAS_GIT and not NO_GIT:
     # history may be empty: also check the identity the *next* commit would be written with
     ident = git("var", "GIT_AUTHOR_IDENT", strict=False)
     who = ident.stdout.rsplit(">", 1)[0] + ">" if ident.returncode == 0 else ""
-    row("next commit identity is public-safe",
-        ident.returncode == 0 and ("noreply" in who or "example.com" in who),
-        f"'{who or 'unset'}' — set git config user.name / user.email (see SECURITY-AND-PRIVACY.md §5)")
+    in_ci = os.environ.get("CI", "").lower() in ("true", "1")
+    ident_ok = ident.returncode == 0 and ("noreply" in who or "example.com" in who)
+    # in CI no commit is made, so an unset identity is not a finding there
+    row("next commit identity is public-safe", ident_ok or (in_ci and ident.returncode != 0),
+        "unset in CI: no commit is created here" if in_ci and ident.returncode != 0
+        else f"'{who or 'unset'}' — set git config user.name / user.email (see SECURITY-AND-PRIVACY.md §5)")
     print(f"{'tracked files':<46} {len(git('ls-files').stdout.split())}")
 elif NO_GIT:
     print(f"{'git repository':<46} checked out, git checks skipped on request (--no-git)")
