@@ -29,7 +29,7 @@ publicsuffix2==2.20191221
 pyOpenSSL==26.4.0
 pyasn1==0.6.5
 pycparser==3.12
-pylsqpack==0.3.24
+pylsqpack==1.1.1
 pyparsing==3.3.3
 pyperclip==1.11.0
 ruamel.yaml==0.19.1
