@@ -52,7 +52,7 @@ jobs:
         run: |
           set -euo pipefail
           if git log --all --diff-filter=A --name-only --pretty=format: \
-             | sort -u | grep -E '^(private|captured|adcapture|playable|mitmconf|all|century|flows)/|\.pem$|adbkey'; then
+             | sort -u | grep -E '^(private|captured|adcapture|playable|mitmconf|all|century|flows)/|\.(pem|p12|pfx|key)$|(^|/)(adbkey|adbkey\.pub)$'; then
             echo "::error::a capture, key or transcript is in the history"
             exit 1
           fi
