@@ -103,6 +103,13 @@ GIT_TOP = git_toplevel()
 HAS_GIT = GIT_TOP is not None and GIT_TOP == os.path.realpath(ROOT)
 
 
+def redact(ident):
+    """'Name <local@domain>' -> 'Name <l***@***>': enough to recognise, not enough to publish."""
+    name, _, mail = ident.partition(" <")
+    local = mail.rstrip(">").split("@", 1)[0]
+    return f"{name} <{local[:1]}***@***>" if mail else name
+
+
 def row(label, ok, detail=""):
     global fail
     print(f"{label:<46} {'ok' if ok else 'FAIL  ' + detail}")
@@ -270,7 +277,10 @@ if HAS_GIT and not NO_GIT:
     authors = sorted({a for a in git("log", "--format=%an <%ae>", strict=False).stdout.splitlines()
                       if a})
     bad_auth = [a for a in authors if "noreply" not in a and "example.com" not in a]
-    row("commit author is public-safe", not bad_auth, ", ".join(bad_auth[:3]))
+    # never echo the offending address: CI logs of a public repository are public too
+    row("commit author is public-safe", not bad_auth,
+        f"{len(bad_auth)} identity(ies), e.g. {', '.join(redact(x) for x in bad_auth[:3])}"
+        " — list them locally: git log --format='%an <%ae>' | sort -u")
     # history may be empty: also check the identity the *next* commit would be written with
     ident = git("var", "GIT_AUTHOR_IDENT", strict=False)
     who = ident.stdout.rsplit(">", 1)[0] + ">" if ident.returncode == 0 else ""
@@ -279,7 +289,7 @@ if HAS_GIT and not NO_GIT:
     # in CI no commit is made, so an unset identity is not a finding there
     row("next commit identity is public-safe", ident_ok or (in_ci and ident.returncode != 0),
         "unset in CI: no commit is created here" if in_ci and ident.returncode != 0
-        else f"'{who or 'unset'}' — set git config user.name / user.email (see SECURITY-AND-PRIVACY.md §5)")
+        else f"'{redact(who) if who else 'unset'}' — set git config user.name / user.email (see SECURITY-AND-PRIVACY.md §5)")
     print(f"{'tracked files':<46} {len(git('ls-files').stdout.split())}")
 elif NO_GIT:
     print(f"{'git repository':<46} checked out, git checks skipped on request (--no-git)")
