@@ -31,7 +31,7 @@ Consequence: Google serves lowest-tier inventory. Volume of ad requests is not t
 
 | what | where |
 | --- | --- |
-| station (this documentation) | `$HOME/playables/AdCaptureStation` — `README.md`, `docs/`, `scripts/`, `config/`, `reviews/` (the game-UI template lives in `private/`, never published) |
+| station (this documentation) | `/path/to/AdCaptureStation` (any directory; run `scripts/…` from it) — `README.md`, `docs/`, `scripts/`, `config/`, `reviews/` (the game-UI template lives in `private/`, never published) |
 | working dir | `$HOME/playables/adcapture` |
 | mitmproxy confdir | `$HOME/playables/adcapture/mitmconf` (CA hash name `<ca-hash>`) |
 | mitmproxy listener | port **8080** on the host; guest proxy `192.168.240.1:8080` |

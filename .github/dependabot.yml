@@ -1,0 +1,17 @@
+# Version updates as pull requests. Actions are pinned by SHA in the workflow; Dependabot keeps the
+# SHA and the version comment in step. The pip files are the two rig venvs (reference pins).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: pip
+    directory: /config
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
