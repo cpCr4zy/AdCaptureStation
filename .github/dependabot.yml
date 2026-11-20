@@ -15,3 +15,22 @@ updates:
     schedule:
       interval: monthly
     open-pull-requests-limit: 5
+    # requirements-mitmvenv.txt is mitmproxy's resolved dependency set, and mitmproxy pins most of
+    # it with hard upper bounds (aioquic ==, urwid/tornado/asgiref/cryptography <=). Bumping one of
+    # those alone makes the file uninstallable, and CI does not install it, so the PR would still
+    # be green. Version updates are therefore limited to mitmproxy itself (move its dependencies
+    # in the same PR, by hand) and the bot venv. cryptography is shared and capped by mitmproxy.
+    # Security updates are not affected by this list.
+    allow:
+      - dependency-name: mitmproxy
+      - dependency-name: certifi
+      - dependency-name: cffi
+      - dependency-name: charset-normalizer
+      - dependency-name: idna
+      - dependency-name: numpy
+      - dependency-name: opencv-python-headless
+      - dependency-name: pillow
+      - dependency-name: protobuf
+      - dependency-name: pycparser
+      - dependency-name: requests
+      - dependency-name: urllib3
