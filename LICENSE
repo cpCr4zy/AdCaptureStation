@@ -1,0 +1,10 @@
+AdCaptureStation is dual-licensed, because the repository holds two kinds of material:
+
+  * code — scripts/ and config/ ......................... MIT, see LICENSE-MIT
+  * documentation — README.md, SECURITY-AND-PRIVACY.md, NOTICE, docs/**, reviews/** ...
+                                                          CC BY 4.0, see LICENSE-CC-BY-4.0
+
+Nothing else is licensed here: no captured creative, game asset, trademark or third-party software
+is distributed with this repository (see NOTICE).
+
+Copyright (c) 2026 the AdCaptureStation authors.

@@ -1,0 +1,13 @@
+# Privileged rule for the Waydroid container.
+# Install as /etc/sudoers.d/waydroid-lxc (mode 0440) AFTER validating it:
+# The user name is a placeholder on purpose (this file is published, see SECURITY-AND-PRIVACY.md):
+#     bash scripts/configure.sh          # writes your user name in place of __USER__
+#     sudo visudo -cf config/sudoers-waydroid-lxc.txt
+#     sudo install -m 0440 config/sudoers-waydroid-lxc.txt /etc/sudoers.d/waydroid-lxc
+#     sudo visudo -c
+#
+# Grant: root inside the container, through a wrapper that hardcodes the container path and name.
+# Why a wrapper and not "lxc-attach ... *": a trailing '*' also matches extra flags such as
+# repeated -P/-n, and lxc-attach honours the last value — so the rule alone does not pin the
+# container, the wrapper does.
+__USER__ ALL=(root) NOPASSWD: /usr/local/sbin/wd-root

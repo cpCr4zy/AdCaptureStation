@@ -1,0 +1,61 @@
+name: publish-scan
+
+# The gate has to run somewhere other than the author's shell, otherwise it is a habit, not a check.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    env:
+      # both must be public: the handle you are willing to publish, and a no-reply address
+      ALLOWED_AUTHOR_NAME: cpCr4zy
+      ALLOWED_AUTHOR_EMAIL_SUFFIX: "@users.noreply.github.com"   # 5735197+cpCr4zy@…
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # full history: gitleaks and the author check need it
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Pre-publication audit (secrets, identifiers, binaries, git state)
+        run: bash scripts/publish_scan.sh
+
+      - name: Secret scan over history
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit identity is public-safe
+        run: |
+          set -euo pipefail
+          echo "authors in history:"
+          git log --format='%an <%ae>' | sort -u
+          bad=0
+          while IFS= read -r line; do
+            name=${line%% <*}; email=${line##*<}; email=${email%>}
+            if [ "$name" != "$ALLOWED_AUTHOR_NAME" ] || [ "${email%$ALLOWED_AUTHOR_EMAIL_SUFFIX}" = "$email" ]; then
+              echo "::error::commit identity is not the public one: $line"
+              bad=1
+            fi
+          done < <(git log --format='%an <%ae>' | sort -u)
+          exit "$bad"
+
+      - name: No rig artefacts in history
+        run: |
+          set -euo pipefail
+          if git log --all --diff-filter=A --name-only --pretty=format: \
+             | sort -u | grep -E '^(private|captured|adcapture|playable|mitmconf|all|century|flows)/|\.pem$|adbkey'; then
+            echo "::error::a capture, key or transcript is in the history"
+            exit 1
+          fi
+
+# Note: the third-party actions above are referenced by major tag for readability. For a long-lived
+# repository, pin each to a commit SHA and let Dependabot bump it.

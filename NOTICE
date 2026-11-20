@@ -1,0 +1,23 @@
+AdCaptureStation — third-party notices
+
+Trademarks and product names
+    Google, Google Ads, Google Mobile Ads (GMA), Google Play, Android, AppLovin, Waydroid, mitmproxy,
+    Cocos Creator, Unity and the titles of the games named in these documents are trademarks or
+    registered trademarks of their respective owners. They appear here nominatively, to describe what
+    the rig observed on a device. No affiliation, sponsorship or endorsement is claimed or implied.
+
+Advertising creatives and game assets
+    No creative, payload, screenshot, game asset, logo or store listing is distributed with this
+    repository. The documents describe a process and reference artifacts that stay on the operator's
+    machine. If you capture creatives yourself, they remain the property of their advertisers and are
+    subject to their own terms.
+
+Software
+    The rig drives third-party tools (Waydroid, mitmproxy, adb/platform-tools, OpenCV, Python). Those
+    are installed separately by the reader and remain under their own licenses; this repository ships
+    no copy of them.
+
+No warranty, no endorsement
+    The material is provided as-is, without warranty of any kind. Running any channel described here
+    is the reader's decision and the reader's risk — including the risk that an ad network treats the
+    resulting traffic as invalid. See `SECURITY-AND-PRIVACY.md`, section 4.
